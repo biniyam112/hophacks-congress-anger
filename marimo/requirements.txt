@@ -1,0 +1,4 @@
+marimo>=0.24
+plotly>=5.22
+pandas>=2.1
+anywidget>=0.9

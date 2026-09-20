@@ -1,0 +1,16 @@
+# raw and scored data (hundreds of MB) — rebuilt by run_pipeline.py
+*.parquet
+emotions/
+emotions_sample/
+bench_sample.parquet
+
+# python / tooling
+__pycache__/
+*.pyc
+.claude/launch.json
+.venv/
+
+# marimo runtime artefacts except the committed session export
+marimo/__marimo__/*
+!marimo/__marimo__/session/
+!marimo/__marimo__/session/*.json

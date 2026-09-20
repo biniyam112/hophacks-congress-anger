@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Makes Congress Angry?</title>
+<meta name="description" content="A field guide to Congressional anger, from 4.8 million tweets by 905 members of Congress, 2011–2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+</head>
+<body>
+
+<header class="hero">
+  <p class="kicker">HopHacks 2026 · Congress on Twitter, 2011–2026</p>
+  <h1>What Makes Congress Angry?</h1>
+  <p class="lede">A field guide, assembled from <span id="meta-tweets">4.8 million</span> tweets by
+    <span id="meta-members">905</span> members of Congress. We scored every tweet for anger with a model trained on
+    tweets, then asked the obvious questions: <em>when</em>, <em>who</em>, and <em>what for</em>.
+    Some of the answers were not the ones we expected.</p>
+</header>
+
+<main>
+
+<!-- ================= CHAPTER 1 ================= -->
+<section class="card" id="ch1">
+  <p class="chapter">Chapter 1</p>
+  <h2>It's not you. It's the White House.</h2>
+  <p class="intro">Congress is angrier than it used to be — a lot angrier. But the average hides the mechanism:
+    anger belongs to whichever party just lost the presidency, and each hand-over ratchets the floor a little higher.</p>
+  <div class="carousel" data-carousel>
+    <div class="slides">
+      <figure class="slide">
+        <figcaption class="chart-title">Anger doubled, in two steps</figcaption>
+        <div class="chart" id="c-year"></div>
+        <p class="caption">Mean anger score per tweet, by year. Anger sat below 0.21 through the Obama years, jumped to 0.29 in 2017,
+          and hit 0.44 in 2025 — the angriest year on record. Bars show 95% confidence intervals (they're tiny: each year has 66k–580k tweets).</p>
+      </figure>
+      <figure class="slide">
+        <figcaption class="chart-title">The X: whoever is out of power is angry</figcaption>
+        <div class="chart" id="c-year-party"></div>
+        <p class="caption">Split by party, the trend becomes a perfect X. Democrats spike when Trump takes office in 2017 and again in 2025;
+          Republicans spike under Biden. The two lines cross at every inauguration.</p>
+      </figure>
+      <figure class="slide">
+        <figcaption class="chart-title">Same rule, four presidencies</figcaption>
+        <div class="chart" id="c-outparty"></div>
+        <p class="caption">Under Obama both parties were equally calm (0.18 vs 0.19). Since then the out-party has been roughly 0.12–0.17 angrier
+          than the in-party — and today's <em>in</em>-party (0.35) is angrier than 2017's <em>out</em>-party (0.34). The floor never resets.</p>
+      </figure>
+    </div>
+    <nav class="pager"><button class="prev" aria-label="Previous">‹</button><span class="count">1 / 3</span><button class="next" aria-label="Next">›</button></nav>
+  </div>
+</section>
+
+<!-- ================= CHAPTER 2 ================= -->
+<section class="card" id="ch2">
+  <p class="chapter">Chapter 2</p>
+  <h2>The seismograph</h2>
+  <p class="intro">Week by week, 2011 to 2026. Hover over any point; the red fill marks weeks above the local baseline,
+    and the diamonds are the 40 biggest spikes. Notice how the blue and red lines are braided together until 2017 — and then split apart.</p>
+  <div class="chart tall" id="c-seismo"></div>
+  <div class="two-col">
+    <div>
+      <h3>The biggest spikes</h3>
+      <p class="caption">Anger in that week relative to the surrounding three months. Four of the top five are government shutdowns.
+        Congress's most reliable source of anger is Congress.</p>
+      <ol class="spikes" id="spike-list"></ol>
+    </div>
+    <div>
+      <h3>Three kinds of spike</h3>
+      <ul class="kinds">
+        <li><strong>Self-inflicted.</strong> Shutdowns, debt ceilings, sequesters, collapsing spending bills. 13 of the 40 spikes.
+          Whoever gets blamed does the yelling: <code>#SchumerShutdown</code> and <code>#RepublicanShutdown</code> trended in the same week.</li>
+        <li><strong>Presidential actions.</strong> Travel ban, family separation, Helsinki, executive orders, the tax bill. About 10.</li>
+        <li><strong>Violence and tragedy.</strong> Orlando, Dallas &amp; Baton Rouge, George Floyd, January 6, Ukraine.
+          These are the only weeks where the two party lines converge — briefly, everyone is angry about the same thing.</li>
+      </ul>
+      <blockquote id="spike-quote"></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHAPTER 3 ================= -->
+<section class="card" id="ch3">
+  <p class="chapter">Chapter 3</p>
+  <h2>Anger keeps office hours</h2>
+  <p class="intro">We expected anger to follow the calendar: election season, campaign mode, the final stretch.
+    It mostly doesn't. What it follows is the clock, the recess schedule, and the news.
+    Every curve here is compared only within its own year, so the 2025 line isn't shouting over the 2012 one.</p>
+  <div class="carousel" data-carousel>
+    <div class="slides">
+      <figure class="slide">
+        <figcaption class="chart-title">The angry hours are after dark</figcaption>
+        <div class="chart" id="c-hour"></div>
+        <p class="caption">Anger by hour of day in each member's home time zone, shown as deviation from that year's average. Grey lines are individual years
+          (hover to identify); black is the tweet-weighted mean. Working hours sit exactly on the average. 9 pm to 4 am is above average in
+          13 of 16 years — but only 4% of tweets are sent then. The few tweets sent at 2 am are angry ones.</p>
+      </figure>
+      <figure class="slide">
+        <figcaption class="chart-title">August recess is the calm month</figcaption>
+        <div class="chart" id="c-month"></div>
+        <p class="caption">By month, same normalization. August is below the yearly average in 14 of 16 years — the only exceptions are 2020 and 2022.
+          January has become the angriest month since 2018 (a new Congress, the State of the Union, and in 2021, the 6th).</p>
+      </figure>
+      <figure class="slide">
+        <figcaption class="chart-title">Eight election cycles, no build-up</figcaption>
+        <div class="chart taller" id="c-cycle"></div>
+        <p class="caption">Weekly anger over each two-year cycle, ending at election day (dashed line). Black is everyone; blue and red are parties.
+          There is no ramp into November in any cycle. The spikes are events — the 2013 shutdown, the 2018 shutdown, Jan 6 — not the calendar.</p>
+      </figure>
+      <figure class="slide">
+        <figcaption class="chart-title">The final stretch is <em>calmer</em></figcaption>
+        <div class="chart" id="c-final"></div>
+        <p class="caption">Mean anger in the last four weeks before election day versus the rest of that year. In six of seven elections the closing
+          weeks are calmer — members switch to hopeful campaign messaging. Only 2020 broke the pattern, and only barely.</p>
+      </figure>
+    </div>
+    <nav class="pager"><button class="prev" aria-label="Previous">‹</button><span class="count">1 / 4</span><button class="next" aria-label="Next">›</button></nav>
+  </div>
+</section>
+
+<!-- ================= CHAPTER 4: FORECAST ================= -->
+<section class="card" id="ch-forecast">
+  <p class="chapter">Chapter 4</p>
+  <h2>The anger forecast</h2>
+  <p class="intro">Suppose a member of Congress is about to tweet. How well can you predict it'll be angry?
+    Overall, <span id="fc-base">29%</span> of tweets are. Knowing the party alone tells you nothing.
+    Knowing the party <em>and who's president</em> tells you a lot. Knowing the <em>person</em> makes it nearly certain.</p>
+  <div class="carousel" data-carousel>
+    <div class="slides">
+      <figure class="slide">
+        <figcaption class="chart-title">Each thing you learn moves the odds</figcaption>
+        <div class="ladder" id="c-ladder"></div>
+        <p class="caption">Probability that a tweet is angry, given what you know. Knowing it's a Democrat tells you nothing; knowing it's a
+          Democrat <em>during Trump's second term</em> jumps the odds to 52%. The hour adds almost nothing on top. But a particular senator,
+          9-to-5, in 2025: a 90% forecast.</p>
+      </figure>
+      <figure class="slide">
+        <figcaption class="chart-title">A forecast you can set your watch by</figcaption>
+        <div class="statement" id="c-statement">
+          <p class="claim">If Patty Murray tweets before sunrise during Trump's second term,<br>it's an angry tweet.</p>
+          <p class="attrib" id="st-attrib">— 84% of 418 tweets, midnight–5 am Pacific, Jan 2025 – Aug 2026</p>
+          <div class="strip" id="st-strip"></div>
+          <div class="strip-ui">
+            <button id="st-play">▶ Play</button><button id="st-reset">↻ Reset</button>
+            <span class="tally" id="st-tally"></span>
+          </div>
+          <div class="tweet-peek" id="st-peek">hover a dot to read the tweet</div>
+        </div>
+        <p class="caption">Every dot is one of her 418 tweets sent between midnight and 5 am on her home-state clock (she's usually in Washington,
+          where it's breakfast). Red is angry, grey is not. Press play and watch them land. The calm ones are birthday wishes and tributes to colleagues;
+          the other 84% are about Medicare, shutdowns and arrests.</p>
+      </figure>
+      <figure class="slide">
+        <figcaption class="chart-title">The loudest people in Congress</figcaption>
+        <div class="statement compact">
+          <p class="claim">Everyone who tweets more than seven times a day is angrier than average.<br>Except Cory Booker.</p>
+          <p class="attrib" id="ld-attrib">— the 12 most prolific members, tweets per day while in office</p>
+        </div>
+        <div class="chart taller" id="c-loudest"></div>
+        <p class="caption">Each bar is a member's posting rate; the red part is the share of those posts that are angry. The typical member posts
+          <span id="ld-median">1.6</span> times a day and is angry <span id="ld-base">29%</span> of the time. Volume and anger rise together
+          (ρ = 0.31 across all 902 members) — you cannot post ten times a day about ribbon-cuttings. Senator Booker, apparently, can.</p>
+      </figure>
+      <figure class="slide">
+        <figcaption class="chart-title">Night owls and morning people</figcaption>
+        <div class="chart" id="c-owls"></div>
+        <p class="caption">Members whose late-night tweets (9 pm–4 am) are far angrier than their daytime ones — and the reverse. Mike Levin is
+          a mild 25% by day and 56% after dark. Bill Hagerty is the opposite: 53% by day, 29% at night. Do not tweet at Mazie Hirono after midnight.
+          <a href="timelapse.html" class="slide-link">Watch a day on the Hill — the animated time-lapse of these nine →</a></p>
+      </figure>
+    </div>
+    <nav class="pager"><button class="prev" aria-label="Previous">‹</button><span class="count">1 / 4</span><button class="next" aria-label="Next">›</button></nav>
+  </div>
+</section>
+
+<!-- ================= CHAPTER 5: NETWORKS ================= -->
+<section class="card" id="ch-network">
+  <p class="chapter">Chapter 5</p>
+  <h2>Two networks, one Congress</h2>
+  <p class="intro">Every tweet that begins <code>RT @</code> is an endorsement — you chose to amplify it. Every tweet that begins
+    <code>.@</code> uses the old Twitter trick for addressing someone <em>in front of everyone</em>. Within a party that's usually praise;
+    across the aisle it is a call-out — 53% of those are angry, twice the rate of an ordinary mention. Same members, same positions on the map,
+    two completely different Congresses.</p>
+  <div class="net-grid">
+    <figure class="net-panel">
+      <figcaption class="chart-title">Who retweets whom</figcaption>
+      <div class="chart tall" id="c-net-rt"></div>
+      <p class="caption"><span id="net-rt-stats"></span> Two islands. The few threads between them — in gold — are the calmest tweets
+        in the whole network: bipartisan bills, tributes, disasters.</p>
+    </figure>
+    <figure class="net-panel">
+      <figcaption class="chart-title">Who calls out whom</figcaption>
+      <div class="chart tall" id="c-net-dot"></div>
+      <p class="caption"><span id="net-dot-stats"></span> Here the lines across the aisle are the whole point — and almost every one runs
+        straight to a party leader.</p>
+    </figure>
+  </div>
+  <div class="two-col">
+    <div>
+      <h3>The lightning rods</h3>
+      <p class="caption">Most <code>.@</code>-addressed by the <em>other</em> party, with the mean anger of those tweets.</p>
+      <ol class="netlist" id="net-rods"></ol>
+    </div>
+    <div>
+      <h3>The bridges</h3>
+      <p class="caption">Most retweeted by the <em>other</em> party. Thomas Massie and John McCain appear on both lists — the only people both
+        sides retweet <em>and</em> yell at.</p>
+      <ol class="netlist" id="net-bridges"></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= METHODS ================= -->
+<section class="card methods" id="methods">
+  <p class="chapter">Appendix</p>
+  <h2>How we measured anger</h2>
+  <ul>
+    <li><strong>Data.</strong> 5.1M tweets from Congressional accounts (the HopHacks <code>congress-tweets-unified</code> dataset). We kept tweets
+      by members of the House and Senate, sent while they were in office, from 2011 onward — dropping executive-branch accounts, pre-election personal
+      tweets and a few hundred pre-2011 rows: <span id="meta-tweets-2">4.83M</span> tweets, <span id="meta-members-2">902</span> members,
+      <span id="meta-from">2011</span> to <span id="meta-to">2026-08</span>.</li>
+    <li><strong>Anger score.</strong> <code>cardiffnlp/twitter-roberta-base-emotion-multilabel-latest</code>, a RoBERTa model trained on tweets, gives
+      each tweet a probability of expressing anger (0–1). Throughout the site, <em>mean anger</em> is the average of that probability, and a tweet counts as
+      <em>angry</em> when the probability is above 0.5 — that is what every "% angry" means. We compared two emotion models on a 2,000-tweet sample and kept
+      the one whose top-scored tweets were actually angry (the older 4-class TweetEval model rated "when we fight, we win!" as rage). Scores are model
+      estimates spot-checked by hand, not human labels; a separate sentiment model's <em>negative</em> score correlates 0.80 with them.</li>
+    <li><strong>Time.</strong> Hours are in each member's home-state time zone; timestamps are UTC as Twitter records them. Hour and month effects are
+      computed within a single year and shown as deviation from that year's mean, so the steep 2011→2026 trend can't masquerade as a daily or seasonal
+      pattern. Election cycles are shown separately, never pooled.</li>
+    <li><strong>Networks.</strong> Retweets are tweets in Twitter's own <code>RT @user:</code> form (99.7% of all RTs); their anger score is that of the
+      content amplified. Almost no retweets survive in the 2023–24 part of the collection (under 2% of tweets, against 11–19% in every other year), so those
+      two years are excluded from the retweet network. Call-outs are tweets that start with <code>.@user</code> or contain it after a space. Across the aisle,
+      53% of <code>.@</code> tweets are angry versus 27% of ordinary cross-party mentions and 25% of replies; within a party, <code>.@</code> is barely angrier
+      than a normal mention (28% vs 25%) — so we read it as a call-out only when it crosses the aisle. Edges need at least three tweets to be drawn.</li>
+    <li><strong>Spikes.</strong> Weekly mean anger minus a centred 13-week rolling median; the top 40 local maxima at least three weeks apart, labelled by
+      hand from the words and hashtags over-represented in that week's angry tweets compared with the surrounding twelve weeks.</li>
+  </ul>
+</section>
+
+</main>
+<footer>Built at HopHacks 2026 · <a href="https://www.calcifercomputing.com/hophacks">dataset by Calcifer Computing</a></footer>
+
+<script src="img/icons.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

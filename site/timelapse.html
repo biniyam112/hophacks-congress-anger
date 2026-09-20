@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Day on the Hill</title>
+<meta name="description" content="Sunrise to sunset with the night owls and morning people of Congress — an animated time-lapse of who gets angry when.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="timelapse.css">
+</head>
+<body>
+
+<header class="hero">
+  <p class="kicker">Interlude · Chapter 3 ½</p>
+  <h1>A day on the Hill</h1>
+  <p class="lede">Congress as a whole is calm from nine to five and angry after dark. But some members run on their own clock.
+    Here are nine of them, sunrise to sunset, with their faces set by the real share of their tweets that were angry at each hour of the day.</p>
+</header>
+
+<main>
+<section class="card" id="timelapse">
+  <p class="chapter">Time-lapse · one day, 5 am to 9 pm, home-state time</p>
+  <h2>Night owls, morning people, and one very long day</h2>
+  <p class="intro">Press play. The six on the left are angriest before dawn and go quiet as the sun climbs; the three on the right wake up mild
+    and get madder with the daylight. Every face is driven by data — the number under each name is the share of that member's tweets, sent in that hour,
+    that our model scored as angry.</p>
+
+  <div class="scene-wrap">
+    <svg id="scene" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cartoon of the Capitol lawn with nine members of Congress whose expressions change as the sun crosses the sky.">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop id="sky-top" offset="0" stop-color="#0b1a3a"/>
+          <stop id="sky-mid" offset="0.62" stop-color="#1c2a55"/>
+          <stop id="sky-hor" offset="1" stop-color="#2a3a6a"/>
+        </linearGradient>
+        <radialGradient id="sunglow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#fff4c2" stop-opacity="0.9"/>
+          <stop offset="0.45" stop-color="#ffd166" stop-opacity="0.35"/>
+          <stop offset="1" stop-color="#ffb347" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="moonglow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#e8f0ff" stop-opacity="0.5"/>
+          <stop offset="1" stop-color="#e8f0ff" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.2"/></filter>
+        <clipPath id="ground-clip"><rect x="0" y="0" width="1200" height="640"/></clipPath>
+      </defs>
+
+      <!-- sky -->
+      <rect id="sky-rect" x="0" y="0" width="1200" height="640" fill="url(#sky)"/>
+      <g id="stars"></g>
+
+      <!-- moon -->
+      <g id="moon" opacity="1">
+        <circle cx="1010" cy="120" r="70" fill="url(#moonglow)"/>
+        <circle cx="1010" cy="120" r="26" fill="#f4f1e6"/>
+        <circle id="moon-bite" cx="1022" cy="112" r="24" fill="#26305a"/>
+      </g>
+
+      <!-- sun -->
+      <g id="sun">
+        <circle id="sun-glow" r="130" fill="url(#sunglow)"/>
+        <g id="sun-rays"></g>
+        <circle id="sun-disc" r="44" fill="#ffd53d" stroke="#ffb347" stroke-width="4"/>
+        <g id="sun-face" fill="none" stroke="#c97a10" stroke-width="3" stroke-linecap="round">
+          <circle cx="-14" cy="-6" r="3" fill="#c97a10" stroke="none"/>
+          <circle cx="14" cy="-6" r="3" fill="#c97a10" stroke="none"/>
+          <path d="M-14,12 Q0,24 14,12"/>
+        </g>
+      </g>
+
+      <!-- clouds -->
+      <g id="clouds"></g>
+      <g id="birds"></g>
+
+      <!-- far hills -->
+      <path id="hill-far" d="M0,470 C120,400 260,420 380,440 C520,465 620,380 780,410 C920,438 1060,395 1200,430 L1200,640 L0,640 Z" fill="#8fbf7a"/>
+
+      <!-- capitol -->
+      <g id="capitol" transform="translate(600,462)">
+        <!-- wings -->
+        <rect x="-330" y="-92" width="660" height="92" rx="4" fill="#efe9dc"/>
+        <rect x="-330" y="-92" width="660" height="10" fill="#e2dccb"/>
+        <g id="cap-windows" fill="#c9c2ae"></g>
+        <!-- central block -->
+        <rect x="-120" y="-150" width="240" height="150" fill="#f4efe3"/>
+        <rect x="-140" y="-156" width="280" height="12" fill="#e2dccb"/>
+        <!-- columns -->
+        <g fill="#e6dfcf">
+          <rect x="-100" y="-142" width="14" height="140"/><rect x="-66" y="-142" width="14" height="140"/>
+          <rect x="-32" y="-142" width="14" height="140"/><rect x="2" y="-142" width="14" height="140"/>
+          <rect x="36" y="-142" width="14" height="140"/><rect x="70" y="-142" width="14" height="140"/>
+          <rect x="86" y="-142" width="14" height="140"/>
+        </g>
+        <path d="M-130,-156 L0,-215 L130,-156 Z" fill="#f4efe3"/>
+        <!-- drum + dome -->
+        <rect x="-78" y="-250" width="156" height="50" fill="#efe9dc"/>
+        <g fill="#d9d2bf">
+          <rect x="-64" y="-246" width="8" height="44"/><rect x="-44" y="-246" width="8" height="44"/><rect x="-24" y="-246" width="8" height="44"/>
+          <rect x="-4" y="-246" width="8" height="44"/><rect x="16" y="-246" width="8" height="44"/><rect x="36" y="-246" width="8" height="44"/><rect x="56" y="-246" width="8" height="44"/>
+        </g>
+        <path d="M-90,-250 C-90,-345 90,-345 90,-250 Z" fill="#f7f3ea"/>
+        <path d="M0,-250 L90,-250 C90,-297 62,-330 22,-320 C10,-316 0,-310 0,-321 Z" fill="#000" opacity="0.05"/>
+        <rect x="-16" y="-350" width="32" height="24" fill="#efe9dc"/>
+        <path d="M-6,-352 L6,-352 L4,-380 L0,-392 L-4,-380 Z" fill="#cfc7b1"/>
+        <!-- steps -->
+        <rect x="-160" y="-8" width="320" height="8" fill="#e2dccb"/>
+        <rect x="-140" y="-16" width="280" height="8" fill="#e6dfcf"/>
+      </g>
+
+      <!-- lawn -->
+      <rect id="lawn" x="0" y="462" width="1200" height="178" fill="#6fae5a"/>
+      <path id="lawn-path" d="M420,462 L780,462 L900,640 L300,640 Z" fill="#d9c9a3"/>
+      <ellipse id="lawn-shade" cx="600" cy="520" rx="700" ry="90" fill="#000" opacity="0.06"/>
+
+      <!-- signs -->
+      <g id="sign-owls" transform="translate(58,530)">
+        <rect x="-4" y="-2" width="8" height="70" fill="#7a5a3a"/>
+        <rect x="-60" y="-52" width="120" height="52" rx="6" fill="#f7f3ea" stroke="#7a5a3a" stroke-width="3"/>
+        <text x="0" y="-31" text-anchor="middle" class="sign-t">NIGHT</text>
+        <text x="0" y="-11" text-anchor="middle" class="sign-t">OWLS</text>
+      </g>
+      <g id="sign-larks" transform="translate(1142,530)">
+        <rect x="-4" y="-2" width="8" height="70" fill="#7a5a3a"/>
+        <rect x="-60" y="-52" width="120" height="52" rx="6" fill="#f7f3ea" stroke="#7a5a3a" stroke-width="3"/>
+        <text x="0" y="-31" text-anchor="middle" class="sign-t">MORNING</text>
+        <text x="0" y="-11" text-anchor="middle" class="sign-t">PEOPLE</text>
+      </g>
+
+      <!-- cast goes here -->
+      <g id="cast"></g>
+
+      <!-- night overlay: darkens everything except sky -->
+      <rect id="night" x="0" y="380" width="1200" height="260" fill="#0b1a3a" opacity="0"/>
+
+      <!-- HUD -->
+      <g id="hud">
+        <rect x="24" y="22" width="232" height="86" rx="10" fill="#0b0b0b" opacity="0.55"/>
+        <text id="hud-time" x="40" y="70" class="hud-time">5:00 am</text>
+        <text id="hud-phase" x="40" y="96" class="hud-phase">before dawn</text>
+
+        <rect x="944" y="22" width="232" height="86" rx="10" fill="#0b0b0b" opacity="0.55"/>
+        <text x="960" y="46" class="hud-label">ALL OF CONGRESS, THIS HOUR</text>
+        <text id="hud-chamber" x="960" y="76" class="hud-chamber">+1.8 pts</text>
+        <text id="hud-chamber-sub" x="960" y="96" class="hud-phase">angrier than the daily average</text>
+        <rect x="960" y="100" width="200" height="4" rx="2" fill="#fff" opacity="0.25"/>
+        <rect id="hud-bar" x="1060" y="100" width="0" height="4" rx="2" fill="#ffb347"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="controls">
+    <button id="play" class="play" aria-label="Play">▶ Play</button>
+    <div class="slider-wrap">
+      <div class="slider-marks">
+        <span style="left:7.5%">☀ rise 6:12</span>
+        <span style="left:43.75%">noon</span>
+        <span style="left:90%">set 19:24 ☀</span>
+      </div>
+      <input id="scrub" type="range" min="5" max="21" step="0.01" value="5" aria-label="Time of day">
+    </div>
+    <label class="speed">speed
+      <select id="speed"><option value="0.5">½×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select>
+    </label>
+    <label class="loop"><input id="loop" type="checkbox" checked> loop</label>
+  </div>
+
+  <p class="caption">Each member's hourly curve comes from every tweet they sent while in office, bucketed by hour in their home-state time zone and
+    scored for anger. Hours with only a handful of tweets are pooled with their neighbours so nobody's face twitches over a single 2 am post.
+    The gauge at top right is the whole chamber: how far this hour's mean anger sits from the day's average (Chapter 3). The night owls are
+    the six members whose 9 pm–4 am tweets are most angrier than their daytime ones; the morning people are the reverse.
+    Michael Rulli is in the chart but not on the lawn — too few tweets to draw an hourly curve.</p>
+
+  <p class="backlink"><a href="index.html#ch3">← Back to the field guide</a></p>
+</section>
+</main>
+
+<footer>Built at HopHacks 2026 · <a href="https://www.calcifercomputing.com/hophacks">dataset by Calcifer Computing</a></footer>
+
+<script src="timelapse.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+id,name,party,state,x,y,rt_in,rt_out,dot_in,dot_out,cross_rt_in,cross_dot_in,cross_dot_anger
+M001184,Thomas Massie,Republican,KY,0.7057,0.8956,321,378,41,58,56,28,0.655
+D000197,Diana DeGette,Democrat,CO,0.6538,0.8874,193,39,4,9,52,4,0.024
+M000303,John McCain,Republican,AZ,0.677,0.8654,97,8,33,0,45,24,0.403
+G000582,"González-Cólón, Jenniffer",Republican,PR,0.685,0.9012,75,0,0,0,40,0,
+S001181,Jeanne Shaheen,Democrat,NH,0.6648,0.8616,199,70,57,47,32,3,0.809
+M001202,Stephanie Murphy,Democrat,FL,0.6641,0.8957,79,56,6,0,31,6,0.209
+K000389,Ro Khanna,Democrat,CA,0.652,0.8874,271,354,9,125,27,9,0.526
+G000555,Kirsten E. Gillibrand,Democrat,NY,0.6512,0.8759,263,34,17,10,27,4,0.24
+D000624,Debbie Dingell,Democrat,MI,0.6482,0.8805,275,74,30,3,27,15,0.152
+K000360,Mark Kirk,Republican,IL,0.6801,0.8594,58,36,7,12,26,7,0.054
+C001088,Christopher A. Coons,Democrat,DE,0.6547,0.8672,263,3,10,5,25,6,0.139
+M001153,Lisa Murkowski,Republican,AK,0.6571,0.8518,53,0,19,5,25,3,0.327
