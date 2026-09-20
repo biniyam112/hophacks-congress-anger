@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gone with the Wind, as told by tweets</title>
+<meta name="description" content="The emotional distance between the two parties in Congress, 2011–2026, played as the romance it resembles.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="romance.css">
+</head>
+<body>
+
+<header class="hero">
+  <p class="kicker">Interlude · Chapter 5 ½</p>
+  <h1>Gone with the Wind,<br>as told by 4.8 million tweets</h1>
+  <p class="lede">Every month since 2011 we measured how far apart the two parties <em>feel</em> — the distance between their
+    average emotional profiles. Plotted, it is the shape of a famous romance: close, the quarrel, a reunion during a catastrophe,
+    separate bedrooms, and a last word. So here it is played as one. Every movement below is the real number.</p>
+</header>
+
+<main>
+<section class="card" id="romance">
+  <p class="chapter">A romance in five acts · 2011 – 2026 · distance drives the distance</p>
+  <h2>Two households, one Capitol</h2>
+  <p class="intro">Press play. The blue figure is the Democratic caucus, the red one the Republican; the gap between them is the measured
+    emotional distance that month. Their faces show whichever emotion separates them most that year — and which side has it.</p>
+
+  <div class="stage-wrap">
+    <svg id="stage" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet" role="img"
+         aria-label="Two figures in a parlour whose distance apart follows the emotional distance between the parties.">
+      <defs>
+        <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+          <stop id="wall-a" offset="0" stop-color="#3a2a22"/><stop id="wall-b" offset="1" stop-color="#1c1410"/>
+        </linearGradient>
+        <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#5a3f2c"/><stop offset="1" stop-color="#2a1c13"/>
+        </linearGradient>
+        <linearGradient id="window" x1="0" y1="0" x2="0" y2="1">
+          <stop id="win-a" offset="0" stop-color="#f7d9a0"/><stop id="win-b" offset="1" stop-color="#e9a86a"/>
+        </linearGradient>
+        <radialGradient id="candle" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#ffe6a8" stop-opacity="0.55"/><stop offset="1" stop-color="#ffe6a8" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="soft"><feGaussianBlur stdDeviation="1.5"/></filter>
+      </defs>
+
+      <!-- room -->
+      <rect x="0" y="0" width="1200" height="480" fill="url(#wall)"/>
+      <rect x="0" y="480" width="1200" height="160" fill="url(#floor)"/>
+      <g id="floorboards" opacity="0.18" stroke="#000"></g>
+      <!-- window -->
+      <rect x="500" y="70" width="200" height="300" rx="100" fill="url(#window)"/>
+      <rect x="500" y="70" width="200" height="300" rx="100" fill="none" stroke="#2a1c13" stroke-width="10"/>
+      <line x1="600" y1="80" x2="600" y2="360" stroke="#2a1c13" stroke-width="6"/>
+      <line x1="510" y1="220" x2="690" y2="220" stroke="#2a1c13" stroke-width="6"/>
+      <g id="rain" opacity="0"></g>
+      <!-- chandelier -->
+      <line x1="600" y1="0" x2="600" y2="40" stroke="#c9a24b" stroke-width="3"/>
+      <ellipse cx="600" cy="52" rx="70" ry="12" fill="none" stroke="#c9a24b" stroke-width="4"/>
+      <g id="chandelier-lights" fill="#ffe6a8"></g>
+      <circle id="candle-glow" cx="600" cy="60" r="220" fill="url(#candle)"/>
+      <!-- portrait frames -->
+      <rect x="120" y="120" width="130" height="170" fill="#2a1c13" stroke="#c9a24b" stroke-width="6"/>
+      <rect x="950" y="120" width="130" height="170" fill="#2a1c13" stroke="#c9a24b" stroke-width="6"/>
+      <text x="185" y="215" class="portrait-txt">D</text>
+      <text x="1015" y="215" class="portrait-txt">R</text>
+
+      <!-- the gap: a measuring line on the floor -->
+      <line id="gap-line" x1="600" y1="560" x2="600" y2="560" stroke="#ffe6a8" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="6 6"/>
+      <text id="gap-label" x="600" y="588" class="gap-label" text-anchor="middle"></text>
+
+      <!-- the two figures (built in JS) -->
+      <g id="dem" class="figure"></g>
+      <g id="rep" class="figure"></g>
+
+      <!-- HUD -->
+      <text x="40" y="52" class="hud-time" id="hud-date">2011</text>
+      <text x="40" y="76" class="hud-phase" id="hud-act"></text>
+      <text x="1160" y="52" class="hud-time" text-anchor="end" id="hud-dist">0.06</text>
+      <text x="1160" y="76" class="hud-phase" text-anchor="end">emotional distance</text>
+
+      <!-- intertitle -->
+      <g id="card" opacity="0">
+        <rect x="150" y="92" width="900" height="76" rx="4" fill="#0b0b0b" fill-opacity="0.72"/>
+        <text x="600" y="124" class="card-title" text-anchor="middle" id="card-title"></text>
+        <text x="600" y="152" class="card-sub" text-anchor="middle" id="card-sub"></text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="controls">
+    <button id="play" class="play" aria-label="Play">▶ Play</button>
+    <div class="slider-wrap">
+      <div class="slider-marks" id="marks"></div>
+      <input id="scrub" type="range" min="0" max="184" value="0" step="1" aria-label="Month">
+    </div>
+    <label>speed <select id="speed"><option value="0.5">½×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label>
+  </div>
+
+  <div class="acts" id="acts"></div>
+
+  <p class="caption">The distance is the Euclidean distance between the two parties' mean scores on eleven emotions in that month (Chapter 5, slide 2,
+    gives the yearly line). Faces: the party that scores higher on the year's largest-gap emotion wears that emotion; the other stays composed.
+    Two lines are borrowed from the 1939 film because the data earned them; everything else is the tweets.</p>
+  <p class="backlink"><a href="index.html#ch-unity">← Back to the field guide</a></p>
+</section>
+</main>
+<footer>Built at HopHacks 2026 · <a href="https://www.calcifercomputing.com/hophacks">dataset by Calcifer Computing</a></footer>
+
+<script src="romance.js"></script>
+</body>
+</html>

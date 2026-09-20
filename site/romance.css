@@ -1,0 +1,52 @@
+/* ---------- romance stage ---------- */
+.stage-wrap { border-radius: 8px; overflow: hidden; background: #1c1410; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
+#stage { display: block; width: 100%; height: auto; }
+
+.portrait-txt { font-family: var(--serif); font-weight: 600; font-size: 64px; fill: #c9a24b; text-anchor: middle; opacity: .55; }
+.gap-label { font-family: var(--mono); font-size: 13px; fill: #ffe6a8; opacity: .85; }
+
+.hud-time { font-family: var(--mono); font-size: 34px; font-weight: 500; fill: #fff; }
+.hud-phase { font-family: var(--sans); font-size: 12.5px; fill: #fff; opacity: .78; }
+
+.card-title { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 26px; fill: #fff; }
+.card-sub { font-family: var(--sans); font-size: 14px; fill: #fff; opacity: .85; }
+
+.figure .name { font-family: var(--sans); font-weight: 600; font-size: 13px; fill: #fff; text-anchor: middle; paint-order: stroke; stroke: rgba(0,0,0,.5); stroke-width: 3px; }
+.figure .mood { font-family: var(--mono); font-size: 12px; fill: #ffe6a8; text-anchor: middle; opacity: .9; }
+.figure .brow, .figure .mouth { fill: none; stroke: #1a1a1a; stroke-width: 3; stroke-linecap: round; }
+.figure .eye { fill: #1a1a1a; }
+.figure.fuming .head { animation: shake .18s linear infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes shake { 0% { transform: translate(-1px,0) rotate(-1deg); } 50% { transform: translate(1px,0) rotate(1deg); } 100% { transform: translate(-1px,0) rotate(-1deg); } }
+.figure .tear { fill: #9ec5f4; opacity: 0; }
+.figure.weeping .tear { animation: drip 1.4s ease-in infinite; }
+@keyframes drip { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: .9; } 100% { opacity: 0; transform: translateY(26px); } }
+.figure .heart { fill: #e34948; opacity: 0; }
+.figure.glowing .heart { animation: float 1.6s ease-out infinite; }
+@keyframes float { 0% { opacity: 0; transform: translateY(0) scale(.6); } 25% { opacity: .95; } 100% { opacity: 0; transform: translateY(-40px) scale(1.2); } }
+.figure .stink { fill: none; stroke: #9db07a; stroke-width: 2; opacity: 0; }
+.figure.disgusted .stink { animation: waft 1.5s ease-out infinite; }
+.figure.disgusted .stink.s2 { animation-delay: .5s; }
+@keyframes waft { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: .8; } 100% { opacity: 0; transform: translateY(-30px); } }
+
+/* controls (same as the time-lapse page) */
+.controls { display: flex; align-items: center; gap: 18px; margin: 18px 0 6px; flex-wrap: wrap; }
+.controls .play { min-width: 104px; height: 40px; border-radius: 20px; border: 1px solid var(--ink); background: var(--ink); color: #fff;
+  font-family: var(--sans); font-weight: 600; font-size: 14px; cursor: pointer; padding: 0 18px; }
+.controls .play:hover { background: #2a2a2a; }
+.slider-wrap { flex: 1 1 320px; position: relative; padding-top: 18px; }
+.slider-marks { position: absolute; top: 0; left: 0; right: 0; height: 16px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.slider-marks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+#scrub { width: 100%; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.controls label { font-size: 13px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; }
+.controls select { font: inherit; font-size: 13px; padding: 3px 6px; border-radius: 6px; border: 1px solid var(--axis); background: #fff; }
+
+/* the five acts, as a programme */
+.acts { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 18px 0 8px; }
+.act { padding: 10px 12px; border: 1px solid var(--grid); border-radius: 6px; cursor: pointer; transition: border-color .15s, background .15s; }
+.act:hover { border-color: var(--axis); }
+.act.on { border-color: var(--ink); background: #faf9f6; }
+.act .n { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.act .t { font-family: var(--serif); font-style: italic; font-size: 15px; margin: 2px 0; }
+.act .y { font-size: 12px; color: var(--ink-2); }
+.backlink { margin: 22px 0 0; font-size: 14px; color: var(--ink-2); }
+@media (max-width: 760px) { .acts { grid-template-columns: 1fr 1fr; } .card { padding: 24px 16px; } .hud-time { font-size: 30px; } }
