@@ -35,12 +35,17 @@ const FACES = {
   neutral: { brow: 0, mouth: 0.15, fx: "" },
 };
 
-let D, months, years, playing = false, i = 0, timer = null;
+let D, months, years, playing = false, i = 0, pos = 0, lastTs = null, raf = null;
+let smooth = [];                       // 3-month centred mean of the distance, so the figures glide instead of twitch
+const MASK_FROM = "2020-03", MASK_TO = "2021-05";   // pandemic months: both figures wear masks
+let cur = null;                        // current (tweened) room colours
+let halfCur = null;                    // damped position of the figures (they glide toward the target)
 
 async function main() {
   D = await (await fetch("data/unity.json")).json();
   months = D.distance_month.mo.map((m, k) => ({ mo: m, year: +m.slice(0, 4), d: D.distance_month.d[k] }));
   years = Object.fromEntries(D.distance.year.map((y, k) => [y, { gap: D.distance.gap[k], demHigher: D.distance.sign[k].startsWith("Democrats"), d: D.distance.d[k] }]));
+  smooth = months.map((m, k) => { const w = months.slice(Math.max(0, k - 2), k + 3); return w.reduce((a, x) => a + x.d, 0) / w.length; });   // 5-month centred mean
   buildRoom(); buildFigure("dem", "#2a78d6", "Democrats"); buildFigure("rep", "#e34948", "Republicans"); buildControls(); buildActs();
   render(0);
 }
@@ -67,6 +72,11 @@ function buildFigure(id, color, name) {
   el("circle", { cx: -14, cy: 38, r: 3.5, class: "eye" }, head); el("circle", { cx: 14, cy: 38, r: 3.5, class: "eye" }, head);
   el("path", { class: "brow bl", d: "M-24 26 L-6 26" }, head); el("path", { class: "brow br", d: "M6 26 L24 26" }, head);
   el("path", { class: "mouth", d: "M-14 56 Q0 62 14 56" }, head);
+  const mask = el("g", { class: "mask" }, head);
+  el("path", { d: "M-24 44 Q-30 50 -26 56 L-40 34", fill: "none", stroke: "#b9d2ea", "stroke-width": 2 }, mask);   // ear loops
+  el("path", { d: "M24 44 Q30 50 26 56 L40 34", fill: "none", stroke: "#b9d2ea", "stroke-width": 2 }, mask);
+  el("rect", { x: -24, y: 44, width: 48, height: 24, rx: 7, fill: "#dbe9f7", stroke: "#9fbddc", "stroke-width": 1.5 }, mask);
+  el("path", { d: "M-18 52 L18 52 M-18 58 L18 58", stroke: "#b9d2ea", "stroke-width": 1.2 }, mask);
   // effects
   el("circle", { class: "tear", cx: -14, cy: 48, r: 3 }, head);
   el("path", { class: "heart", d: "M0 -8 C-8 -20 -26 -6 0 12 C26 -6 8 -20 0 -8 Z", transform: "translate(34,-6) scale(0.8)" }, head);
@@ -88,34 +98,46 @@ function setFace(id, emo, on) {
 
 function actFor(year) { return ACTS.find((a) => year >= a.y[0] && year <= a.y[1]) || ACTS[ACTS.length - 1]; }
 
-function render(k) {
-  i = clamp(k, 0, months.length - 1);
+function render(p, dt = 0) {
+  pos = clamp(p, 0, months.length - 1);
+  i = Math.round(pos);
+  const lo = Math.floor(pos), hi = Math.min(lo + 1, months.length - 1), f = pos - lo;
   const m = months[i], yr = years[m.year], act = actFor(m.year);
+  const d = lerp(smooth[lo], smooth[hi], f);
   // the gap: 0.05 (touching) -> 0.60 (opposite walls)
-  const half = lerp(70, 470, clamp((m.d - 0.05) / 0.55, 0, 1));
+  const halfTarget = lerp(70, 470, clamp((d - 0.05) / 0.55, 0, 1));
+  if (halfCur === null || !dt) halfCur = halfTarget; else halfCur = lerp(halfCur, halfTarget, 1 - Math.exp(-dt / 0.45));
+  const half = halfCur;
   const y = 300;
-  $("dem").setAttribute("transform", `translate(${600 - half}, ${y})`);
-  $("rep").setAttribute("transform", `translate(${600 + half}, ${y})`);
+  $("dem").setAttribute("transform", `translate(${(600 - half).toFixed(1)}, ${y})`);
+  $("rep").setAttribute("transform", `translate(${(600 + half).toFixed(1)}, ${y})`);
   $("gap-line").setAttribute("x1", 600 - half + 46); $("gap-line").setAttribute("x2", 600 + half - 46);
   $("gap-label").textContent = `distance ${m.d.toFixed(2)}`;
-  // faces: whoever is higher on this year's largest-gap emotion wears it
+  // faces: whoever is higher on this year's largest-gap emotion wears it; masks during the pandemic
   setFace("dem", yr.gap, yr.demHigher); setFace("rep", yr.gap, !yr.demHigher);
-  // room mood
-  const M = MOODS[act.mood];
-  $("wall-a").setAttribute("stop-color", M.wallA); $("wall-b").setAttribute("stop-color", M.wallB);
-  $("win-a").setAttribute("stop-color", M.winA); $("win-b").setAttribute("stop-color", M.winB);
-  $("candle-glow").setAttribute("opacity", M.glow); $("rain").setAttribute("opacity", M.rain);
-  $("chandelier-lights").querySelectorAll(".bulb").forEach((b) => b.setAttribute("opacity", 0.4 + 0.6 * M.glow));
-  // HUD + intertitle + programme
+  const masked = m.mo.slice(0, 7) >= MASK_FROM && m.mo.slice(0, 7) <= MASK_TO;
+  $("dem").classList.toggle("masked", masked); $("rep").classList.toggle("masked", masked);
+  // room mood, cross-faded toward the act's palette (~0.8 s time constant)
+  const T = MOODS[act.mood];
+  if (!cur) cur = { ...T };
+  const a = dt ? 1 - Math.exp(-dt / 0.8) : 1;
+  for (const k of ["wallA", "wallB", "winA", "winB"]) cur[k] = mix(cur[k].startsWith("rgb") ? rgbToHex(cur[k]) : cur[k], T[k], a);
+  cur.glow = lerp(cur.glow, T.glow, a); cur.rain = lerp(cur.rain, T.rain, a);
+  $("wall-a").setAttribute("stop-color", cur.wallA); $("wall-b").setAttribute("stop-color", cur.wallB);
+  $("win-a").setAttribute("stop-color", cur.winA); $("win-b").setAttribute("stop-color", cur.winB);
+  $("candle-glow").setAttribute("opacity", cur.glow); $("rain").setAttribute("opacity", cur.rain);
+  $("chandelier-lights").querySelectorAll(".bulb").forEach((b) => b.setAttribute("opacity", 0.4 + 0.6 * cur.glow));
+  // HUD + intertitle (fades in over the first months of an act, out after a few) + programme
   $("hud-date").textContent = new Date(m.mo + "T00:00:00").toLocaleDateString("en-US", { month: "short", year: "numeric" });
   $("hud-act").textContent = `${act.n} · ${act.t}`;
   $("hud-dist").textContent = m.d.toFixed(2);
   $("card-title").textContent = `${act.n} — ${act.t}`; $("card-sub").textContent = act.sub;
-  const first = months.findIndex((x) => x.year === act.y[0]);
-  $("card").setAttribute("opacity", i - first < 10 ? 1 - Math.max(0, i - first - 6) / 4 : 0);
-  document.querySelectorAll(".act").forEach((a, k) => a.classList.toggle("on", ACTS[k] === act));
+  const first = months.findIndex((x) => x.year === act.y[0]), since = pos - first;
+  $("card").setAttribute("opacity", clamp(Math.min(since / 1.5, (14 - since) / 3), 0, 1));
+  document.querySelectorAll(".act").forEach((el2, k) => el2.classList.toggle("on", ACTS[k] === act));
   $("scrub").value = i;
 }
+function rgbToHex(rgb) { const v = rgb.match(/\d+/g).map(Number); return "#" + v.map((x) => x.toString(16).padStart(2, "0")).join(""); }
 
 function buildControls() {
   const scrub = $("scrub"); scrub.max = months.length - 1;
@@ -125,12 +147,21 @@ function buildControls() {
   $("play").addEventListener("click", () => (playing ? pause() : play()));
 }
 function play() {
-  if (i >= months.length - 1) render(0);
-  playing = true; $("play").textContent = "❚❚ Pause";
-  const step = () => { if (!playing) return; if (i >= months.length - 1) { pause(); return; } render(i + 1); timer = setTimeout(step, 260 / +$("speed").value); };
-  step();
+  if (pos >= months.length - 1) render(0);
+  playing = true; $("play").textContent = "❚❚ Pause"; lastTs = null;
+  // clock-driven tween (~60 fps); dt comes from the clock so a throttled tab just catches up smoothly
+  const frame = () => {
+    if (!playing) return;
+    const ts = performance.now();
+    const dt = lastTs ? Math.min(0.1, (ts - lastTs) / 1000) : 0; lastTs = ts;
+    const monthsPerSecond = 2.2 * +$("speed").value;          // 1x: the whole story in ~85 s
+    if (pos >= months.length - 1) { pause(); return; }
+    render(pos + dt * monthsPerSecond, dt);
+    raf = setTimeout(frame, 16);
+  };
+  frame();
 }
-function pause() { playing = false; clearTimeout(timer); $("play").textContent = "▶ Play"; }
+function pause() { playing = false; clearTimeout(raf); $("play").textContent = "▶ Play"; }
 
 function buildActs() {
   const box = $("acts");

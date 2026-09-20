@@ -15,16 +15,21 @@
 .figure .mood { font-family: var(--mono); font-size: 12px; fill: #ffe6a8; text-anchor: middle; opacity: .9; }
 .figure .brow, .figure .mouth { fill: none; stroke: #1a1a1a; stroke-width: 3; stroke-linecap: round; }
 .figure .eye { fill: #1a1a1a; }
-.figure.fuming .head { animation: shake .18s linear infinite; transform-origin: center; transform-box: fill-box; }
-@keyframes shake { 0% { transform: translate(-1px,0) rotate(-1deg); } 50% { transform: translate(1px,0) rotate(1deg); } 100% { transform: translate(-1px,0) rotate(-1deg); } }
+.figure.fuming .head { animation: tremble 1.6s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes tremble { 0% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } 100% { transform: rotate(-1.5deg); } }
 .figure .tear { fill: #9ec5f4; opacity: 0; }
-.figure.weeping .tear { animation: drip 1.4s ease-in infinite; }
+.figure.weeping .tear { animation: drip 2.4s ease-in infinite; }
 @keyframes drip { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: .9; } 100% { opacity: 0; transform: translateY(26px); } }
+.figure .mask { opacity: 0; transition: opacity .6s; }
+.figure.masked .mask { opacity: 1; }
+.figure.masked .mouth { opacity: 0; }
+.figure .mouth { transition: opacity .6s; }
+.figure .brow, .figure .mouth { transition: d .5s; }
 .figure .heart { fill: #e34948; opacity: 0; }
-.figure.glowing .heart { animation: float 1.6s ease-out infinite; }
+.figure.glowing .heart { animation: float 2.8s ease-out infinite; }
 @keyframes float { 0% { opacity: 0; transform: translateY(0) scale(.6); } 25% { opacity: .95; } 100% { opacity: 0; transform: translateY(-40px) scale(1.2); } }
 .figure .stink { fill: none; stroke: #9db07a; stroke-width: 2; opacity: 0; }
-.figure.disgusted .stink { animation: waft 1.5s ease-out infinite; }
+.figure.disgusted .stink { animation: waft 2.6s ease-out infinite; }
 .figure.disgusted .stink.s2 { animation-delay: .5s; }
 @keyframes waft { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: .8; } 100% { opacity: 0; transform: translateY(-30px); } }
 
