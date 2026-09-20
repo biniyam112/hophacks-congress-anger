@@ -407,7 +407,10 @@ renderers["c-unity-distance"] = () => {
     shapes: [2017, 2021, 2025].map((x) => ({ type: "line", x0: x, x1: x, y0: 0, y1: 1, yref: "paper", line: { color: C.grid, width: 1 } })),
     annotations: [
       ...[[2017, "Trump"], [2021, "Biden"], [2025, "Trump II"]].map(([x, t]) => ({ x, y: 1, yref: "paper", text: t, showarrow: false, xanchor: "left", yanchor: "top", font: { size: 11, color: C.muted } })),
-      ...Object.entries(notes).map(([x, t]) => { const i = U.year.indexOf(+x); return { x: +x, y: U.d[i], text: t, showarrow: true, arrowhead: 0, arrowcolor: C.muted, ax: 0, ay: +x === 2020 ? 40 : -26, font: { size: 11, color: +x === 2020 ? C.dem : C.ink } }; }),
+      // emotion callouts sit to the right of the point, below the presidency labels, so nothing collides at 2017/2021/2025
+      ...Object.entries(notes).map(([x, t]) => { const i = U.year.indexOf(+x); const covid = +x === 2020;
+        return { x: +x, y: U.d[i], text: t, showarrow: true, arrowhead: 0, arrowcolor: C.muted, ax: covid ? 0 : 34, ay: covid ? 40 : 22, xanchor: covid ? "center" : "left",
+                 font: { size: 11, color: covid ? C.dem : C.ink }, bgcolor: "rgba(255,255,255,0.85)", borderpad: 2 }; }),
     ],
   }), CONFIG);
 };

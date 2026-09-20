@@ -731,7 +731,9 @@ def _(C, UNITY, base_layout, go, mo):
                      text=[f"biggest gap: <b>{g}</b> ({s})" for g, s in zip(_D["gap"], _D["sign"])], hovertemplate="%{x}: distance %{y:.2f}<br>%{text}<extra></extra>", showlegend=False)
     for _x, _t in _notes.items():
         _i = _D["year"].index(_x)
-        _fig.add_annotation(x=_x, y=_D["d"][_i], text=_t, showarrow=True, arrowhead=0, arrowcolor=C["muted"], ax=0, ay=40 if _x == 2020 else -26, font=dict(size=11, color=C["dem"] if _x == 2020 else C["ink"]))
+        _covid = _x == 2020   # callouts sit beside the point, clear of the presidency labels at the top
+        _fig.add_annotation(x=_x, y=_D["d"][_i], text=_t, showarrow=True, arrowhead=0, arrowcolor=C["muted"], ax=0 if _covid else 34, ay=40 if _covid else 22,
+                            xanchor="center" if _covid else "left", font=dict(size=11, color=C["dem"] if _covid else C["ink"]), bgcolor="rgba(255,255,255,0.85)", borderpad=2)
     _fig.update_layout(base_layout(hovermode="closest", height=380, title=dict(text="How far apart the parties feel", font=dict(size=16, color=C["ink"])),
                                    xaxis=dict(dtick=1), yaxis=dict(title="distance between party emotion profiles", rangemode="tozero")))
     mo.vstack([
