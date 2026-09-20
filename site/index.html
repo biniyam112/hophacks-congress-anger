@@ -177,9 +177,47 @@
   </div>
 </section>
 
-<!-- ================= CHAPTER 5: NETWORKS ================= -->
-<section class="card" id="ch-network">
+<!-- ================= CHAPTER 5: UNITING vs DIVIDING ================= -->
+<section class="card" id="ch-unity">
   <p class="chapter">Chapter 5</p>
+  <h2>Nobody unites from opposition</h2>
+  <p class="intro">Anger is one emotion; we scored eleven. Sorting tweets into two registers — <em>civic unity</em> (positive, and explicitly
+    about working across the aisle) and <em>polarizing</em> (angry or disgusted, and aimed at the other party) — shows the same flip as
+    Chapter 1, in both directions at once. The party in power tweets unity. The party out of power tweets at the other side.</p>
+  <div class="carousel" data-carousel>
+    <div class="slides">
+      <figure class="slide">
+        <figcaption class="chart-title">The mirror</figcaption>
+        <div class="chart taller" id="c-unity-mirror"></div>
+        <p class="caption">Share of each party's tweets per year that are polarizing (top) and civic-uniting (bottom, note the smaller scale).
+          Polarizing tweets belong to the out-party — Democrats 17% in 2017, Republicans 25% in 2022, Democrats <strong>35% in 2025</strong>, the record.
+          Civic unity belongs to the in-party: Republicans' peak (4.2%) is 2018, Democrats' (5.6%) is 2024. In 2025 both fall to 2.6%.</p>
+      </figure>
+      <figure class="slide">
+        <figcaption class="chart-title">How far apart the parties feel</figcaption>
+        <div class="chart" id="c-unity-distance"></div>
+        <p class="caption">Each year, the average of all eleven emotions for each party; the line is the distance between the two profiles. The parties
+          felt roughly the same things through 2016, split apart in 2017 (the gap was <em>anger</em>), <strong>came back together in 2019–20</strong> — the
+          pandemic year is the last time Congress was emotionally close — and split again in 2021. Since then the biggest gap isn't anger but
+          <em>optimism</em>: one side has it, the other doesn't. In 2025 it's <em>disgust</em>.</p>
+      </figure>
+      <figure class="slide">
+        <figcaption class="chart-title">The calendar of unity</figcaption>
+        <div class="two-col unity-cal">
+          <div><h3>Most uniting months</h3><ol class="netlist" id="unity-top"></ol></div>
+          <div><h3>Most polarizing months</h3><ol class="netlist" id="unity-bottom"></ol></div>
+        </div>
+        <p class="caption">Civic-unity share versus polarizing share, both parties pooled, minimum 5,000 tweets in the month. Unity peaks on things that
+          actually passed — infrastructure, COVID relief, the Ukraine response. The eight most polarizing months in the whole dataset are all in 2025.</p>
+      </figure>
+    </div>
+    <nav class="pager"><button class="prev" aria-label="Previous">‹</button><span class="count">1 / 3</span><button class="next" aria-label="Next">›</button></nav>
+  </div>
+</section>
+
+<!-- ================= CHAPTER 6: NETWORKS ================= -->
+<section class="card" id="ch-network">
+  <p class="chapter">Chapter 6</p>
   <h2>Two networks, one Congress</h2>
   <p class="intro">Every tweet that begins <code>RT @</code> is an endorsement — you chose to amplify it. Every tweet that begins
     <code>.@</code> uses the old Twitter trick for addressing someone <em>in front of everyone</em>. Within a party that's usually praise;
@@ -236,6 +274,11 @@
       two years are excluded from the retweet network. Call-outs are tweets that start with <code>.@user</code> or contain it after a space. Across the aisle,
       53% of <code>.@</code> tweets are angry versus 27% of ordinary cross-party mentions and 25% of replies; within a party, <code>.@</code> is barely angrier
       than a normal mention (28% vs 25%) — so we read it as a call-out only when it crosses the aisle. Edges need at least three tweets to be drawn.</li>
+    <li><strong>Uniting vs. dividing.</strong> A tweet is <em>civic-uniting</em> if it is positive (joy, optimism, love or trust above 0.5 and neither
+      anger nor disgust above 0.5) and contains explicit cross-party language (bipartisan, across the aisle, both parties, common ground, work/come
+      together, unity). It is <em>polarizing</em> if anger or disgust is above 0.5 and it names the other party or its leaders. Gratitude tweets
+      ("thank you", "proud to") are counted separately and not as unity. Emotional distance is the Euclidean distance between the two parties'
+      mean 11-emotion vectors in a year.</li>
     <li><strong>Spikes.</strong> Weekly mean anger minus a centred 13-week rolling median; the top 40 local maxima at least three weeks apart, labelled by
       hand from the words and hashtags over-represented in that week's angry tweets compared with the surrounding twelve weeks.</li>
   </ul>

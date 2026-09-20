@@ -180,3 +180,7 @@ footer { text-align: center; color: #fff; opacity: .8; padding: 0 16px 40px; fon
 .js-plotly-plot .hoverlayer .hovertext path { rx: 6; stroke: none !important; }
 .js-plotly-plot .hoverlayer .hovertext text { font-family: var(--sans) !important; }
 .js-plotly-plot .hoverlayer .legend rect, .js-plotly-plot .hoverlayer .legend path { stroke: none !important; }
+
+.unity-cal h3 { margin-top: 6px; }
+.unity-cal .netlist li { grid-template-columns: 72px 1fr auto; }
+.netlist .mo { color: var(--muted); font-variant-numeric: tabular-nums; }

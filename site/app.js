@@ -26,12 +26,13 @@ const loaded = new Set();
 const renderers = {};
 
 async function main() {
-  const names = ["meta", "year", "outparty", "seismograph", "hour", "month", "cycle", "forecast", "statement", "loudest", "network"];
+  const names = ["meta", "year", "outparty", "seismograph", "hour", "month", "cycle", "forecast", "statement", "loudest", "network", "unity"];
   await Promise.all(names.map(async (n) => { D[n] = await (await fetch(`data/${n}.json`)).json(); }));
   fillMeta();
   setupCarousels();
   renderSeismograph();
   renderNetworks();
+  renderUnityCalendar();
   // render whichever slides are active now
   document.querySelectorAll(".slide.active .chart, .slide.active .stat, .slide.active .statement").forEach((el) => renderIfNeeded(el.id));
   window.addEventListener("resize", () => document.querySelectorAll(".slide.active .chart, .chart.tall").forEach((el) => {
@@ -375,7 +376,50 @@ renderers["c-loudest"] = () => {
   }
 };
 
-/* ---------- Chapter 5: two networks, one Congress — "the aisle" layout ---------- */
+/* ---------- Chapter 5: uniting vs dividing ---------- */
+renderers["c-unity-mirror"] = () => {
+  const U = D.unity, pc = ".0%";
+  const ann = (y, t, dom) => ({ x: y, y: 1, yref: dom, xref: "x", text: t, showarrow: false, xanchor: "left", yanchor: "top", font: { size: 11, color: C.muted } });
+  Plotly.newPlot("c-unity-mirror", [
+    { x: U.year, y: U.polarizing.dem, name: "Democrats · polarizing", type: "scatter", mode: "lines+markers", line: { color: C.dem, width: 2 }, marker: { size: 6 }, yaxis: "y", hovertemplate: "%{y:.1%}" },
+    { x: U.year, y: U.polarizing.rep, name: "Republicans · polarizing", type: "scatter", mode: "lines+markers", line: { color: C.rep, width: 2 }, marker: { size: 6 }, yaxis: "y", hovertemplate: "%{y:.1%}" },
+    { x: U.year, y: U.civic.dem, name: "Democrats · civic unity", type: "scatter", mode: "lines+markers", line: { color: C.dem, width: 2, dash: "dot" }, marker: { size: 6, symbol: "diamond" }, yaxis: "y2", hovertemplate: "%{y:.1%}" },
+    { x: U.year, y: U.civic.rep, name: "Republicans · civic unity", type: "scatter", mode: "lines+markers", line: { color: C.rep, width: 2, dash: "dot" }, marker: { size: 6, symbol: "diamond" }, yaxis: "y2", hovertemplate: "%{y:.1%}" },
+  ], layout({
+    margin: { l: 56, r: 16, t: 30, b: 40 }, legend: { orientation: "h", x: 0, y: 1.1, font: { size: 11.5 } },
+    xaxis: ax({ dtick: 1, anchor: "y2" }),
+    yaxis: ax({ domain: [0.56, 1], title: { text: "polarizing", font: { size: 12 } }, tickformat: pc, rangemode: "tozero" }),
+    yaxis2: ax({ domain: [0, 0.44], title: { text: "civic unity", font: { size: 12 } }, tickformat: pc, rangemode: "tozero" }),
+    shapes: [2017, 2021, 2025].flatMap((x) => [{ type: "line", x0: x, x1: x, y0: 0, y1: 1, yref: "paper", line: { color: C.grid, width: 1 } }]),
+    annotations: [[2017, "Trump"], [2021, "Biden"], [2025, "Trump II"]].map(([x, t]) => ({ x, y: 1, yref: "paper", text: t, showarrow: false, xanchor: "left", yanchor: "top", font: { size: 11, color: C.muted } })),
+  }), CONFIG);
+};
+
+renderers["c-unity-distance"] = () => {
+  const U = D.unity.distance;
+  const notes = { 2017: "anger", 2020: "COVID: closest since 2011", 2021: "optimism", 2025: "disgust" };
+  Plotly.newPlot("c-unity-distance", [
+    { x: U.year, y: U.d, type: "scatter", mode: "lines+markers", line: { color: C.ink, width: 2.2 }, marker: { size: 8, color: C.ink },
+      fill: "tozeroy", fillcolor: "rgba(11,11,11,0.06)", text: U.gap.map((g, i) => `biggest gap: <b>${g}</b> (${U.sign[i]})`), hovertemplate: "%{x}: distance %{y:.2f}<br>%{text}<extra></extra>", showlegend: false },
+  ], layout({
+    hovermode: "closest", margin: { l: 56, r: 16, t: 24, b: 44 },
+    xaxis: ax({ dtick: 1 }), yaxis: ax({ title: { text: "distance between party emotion profiles", font: { size: 12 } }, rangemode: "tozero" }),
+    shapes: [2017, 2021, 2025].map((x) => ({ type: "line", x0: x, x1: x, y0: 0, y1: 1, yref: "paper", line: { color: C.grid, width: 1 } })),
+    annotations: [
+      ...[[2017, "Trump"], [2021, "Biden"], [2025, "Trump II"]].map(([x, t]) => ({ x, y: 1, yref: "paper", text: t, showarrow: false, xanchor: "left", yanchor: "top", font: { size: 11, color: C.muted } })),
+      ...Object.entries(notes).map(([x, t]) => { const i = U.year.indexOf(+x); return { x: +x, y: U.d[i], text: t, showarrow: true, arrowhead: 0, arrowcolor: C.muted, ax: 0, ay: +x === 2020 ? 40 : -26, font: { size: 11, color: +x === 2020 ? C.dem : C.ink } }; }),
+    ],
+  }), CONFIG);
+};
+
+function renderUnityCalendar() {
+  const U = D.unity.calendar, fmt = (m) => new Date(m).toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  const li = (r, key) => `<li><span class="mo">${fmt(r.mo)}</span><span>${r.event || "—"}</span><span class="n">${(r[key] * 100).toFixed(1)}%</span></li>`;
+  document.getElementById("unity-top").innerHTML = U.uniting.map((r) => li(r, "civic")).join("");
+  document.getElementById("unity-bottom").innerHTML = U.polarizing.map((r) => li(r, "polarizing")).join("");
+}
+
+/* ---------- Chapter 6: two networks, one Congress — "the aisle" layout ---------- */
 function renderNetworks() {
   const N = D.network;
   const isDR = (p) => p === "Democrat" || p === "Republican";

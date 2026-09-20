@@ -30,7 +30,9 @@ def _(mo):
            calm month; and the final four weeks before an election are *calmer*, not angrier.
         4. **You can forecast it.** Knowing the party tells you nothing; knowing the party *and the president* moves the odds from 29% to
            52%; knowing the person makes it near-certain (Chris Van Hollen, 9-to-5, 2025: 90%).
-        5. **Two networks, one Congress.** Only 2% of member retweets cross the aisle, and those are the calmest tweets we have.
+        5. **Nobody unites from opposition.** Civic-unity tweets belong to the party in power and polarizing tweets to the party out of it;
+           the two parties' emotional profiles were closest in 2020 and have been far apart since 2021. 2025 is the most polarizing year on record.
+        6. **Two networks, one Congress.** Only 2% of member retweets cross the aisle, and those are the calmest tweets we have.
            37% of `.@` call-outs cross the aisle, and those are the angriest — nearly all aimed at party leaders.
 
         This notebook reproduces every chart from our web story and adds what a notebook can do that a web page can't:
@@ -98,6 +100,7 @@ def _(load_csv, load_json):
     STATEMENT = load_json("statement")
     LOUDEST = load_json("loudest")
     NETWORK = load_json("network")
+    UNITY = load_json("unity")
     weekly = load_csv("seismograph_weekly")
     cells = load_csv("forecast_party_era_hour")
     member_cells = load_csv("forecast_member_era_hour")
@@ -113,6 +116,7 @@ def _(load_csv, load_json):
         OUTPARTY,
         SEISMO,
         STATEMENT,
+        UNITY,
         YEAR,
         cells,
         member_cells,
@@ -672,7 +676,92 @@ def _(C, LOUDEST, PARTY, base_layout, go, min_tweets, mo, top_n, volume):
 
 @app.cell
 def _(mo):
-    mo.md(r"""### Chapter 5 · Two networks, one Congress""")
+    mo.md(
+        r"""
+        ### Chapter 5 · Nobody unites from opposition
+
+        Anger is one emotion; we scored eleven. Sorting tweets into two registers — **civic unity** (positive tone *and* explicit
+        cross-party language: bipartisan, across the aisle, common ground, work together) and **polarizing** (anger or disgust *and* a
+        reference to the other party or its leaders) — shows the Chapter 1 flip in both directions at once. Gratitude tweets
+        ("thank you", "proud to") are counted separately, not as unity.
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    unity_view = mo.ui.radio(options={"civic unity": "civic", "gratitude": "gratitude"}, value="civic unity", label="positive register")
+    unity_view
+    return (unity_view,)
+
+
+@app.cell
+def _(C, UNITY, base_layout, go, mo, unity_view):
+    from plotly.subplots import make_subplots as _mk
+
+    _U = UNITY
+    _pos = _U[unity_view.value]
+    _fig = _mk(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.12, subplot_titles=["Polarizing — angry or disgusted, aimed at the other party", f"{unity_view.value.title()} — positive, " + ("explicitly cross-party" if unity_view.value == "civic" else "thanks / proud / honored")])
+    _fig.add_scatter(x=_U["year"], y=_U["polarizing"]["dem"], name="Democrats", mode="lines+markers", line=dict(color=C["dem"], width=2), hovertemplate="%{y:.1%}", row=1, col=1)
+    _fig.add_scatter(x=_U["year"], y=_U["polarizing"]["rep"], name="Republicans", mode="lines+markers", line=dict(color=C["rep"], width=2), hovertemplate="%{y:.1%}", row=1, col=1)
+    _fig.add_scatter(x=_U["year"], y=_pos["dem"], name="Democrats", mode="lines+markers", line=dict(color=C["dem"], width=2, dash="dot"), marker=dict(symbol="diamond"), showlegend=False, hovertemplate="%{y:.1%}", row=2, col=1)
+    _fig.add_scatter(x=_U["year"], y=_pos["rep"], name="Republicans", mode="lines+markers", line=dict(color=C["rep"], width=2, dash="dot"), marker=dict(symbol="diamond"), showlegend=False, hovertemplate="%{y:.1%}", row=2, col=1)
+    for _x, _t in [(2017, "Trump"), (2021, "Biden"), (2025, "Trump II")]:
+        _fig.add_vline(x=_x, line=dict(color=C["grid"], width=1), annotation_text=_t, annotation_position="top left", annotation_font=dict(size=11, color=C["muted"]))
+    _fig.update_layout(base_layout(height=560, title=dict(text="The mirror: share of each party's tweets per year", font=dict(size=16, color=C["ink"])), legend=dict(y=1.0)))
+    _fig.update_xaxes(dtick=1, gridcolor=C["grid"]); _fig.update_yaxes(tickformat=".0%", rangemode="tozero", gridcolor=C["grid"])
+    mo.vstack([
+        mo.ui.plotly(_fig),
+        mo.md(
+            "Polarizing tweets belong to the out-party — Democrats 17% in 2017, Republicans 25% in 2022, Democrats **35% in 2025**, the record. "
+            "Civic unity belongs to the in-party: Republicans' peak (4.2%) is 2018, Democrats' (5.6%) is 2024; in 2025 both fall to 2.6%. "
+            "Switch to *gratitude* and the same flip appears in the ribbon-cutting register."
+        ),
+    ])
+    return
+
+
+@app.cell
+def _(C, UNITY, base_layout, go, mo):
+    _D = UNITY["distance"]
+    _notes = {2017: "anger", 2020: "COVID: closest since 2011", 2021: "optimism", 2025: "disgust"}
+    _fig = go.Figure()
+    _fig.add_scatter(x=_D["year"], y=_D["d"], mode="lines+markers", line=dict(color=C["ink"], width=2.2), marker=dict(size=8), fill="tozeroy", fillcolor="rgba(11,11,11,0.06)",
+                     text=[f"biggest gap: <b>{g}</b> ({s})" for g, s in zip(_D["gap"], _D["sign"])], hovertemplate="%{x}: distance %{y:.2f}<br>%{text}<extra></extra>", showlegend=False)
+    for _x, _t in _notes.items():
+        _i = _D["year"].index(_x)
+        _fig.add_annotation(x=_x, y=_D["d"][_i], text=_t, showarrow=True, arrowhead=0, arrowcolor=C["muted"], ax=0, ay=40 if _x == 2020 else -26, font=dict(size=11, color=C["dem"] if _x == 2020 else C["ink"]))
+    _fig.update_layout(base_layout(hovermode="closest", height=380, title=dict(text="How far apart the parties feel", font=dict(size=16, color=C["ink"])),
+                                   xaxis=dict(dtick=1), yaxis=dict(title="distance between party emotion profiles", rangemode="tozero")))
+    mo.vstack([
+        mo.ui.plotly(_fig),
+        mo.md(
+            "Each year, the mean of all eleven emotions for each party; the line is the Euclidean distance between the two profiles. The parties felt "
+            "roughly the same things through 2016, split in 2017 (the gap was *anger*), **came back together in 2019–20** — the pandemic year is the "
+            "last time Congress was emotionally close — and split again in 2021. Since then the biggest gap isn't anger but *optimism*; in 2025 it's *disgust*."
+        ),
+    ])
+    return
+
+
+@app.cell
+def _(UNITY, mo, pd):
+    _fmt = lambda df, col: (pd.DataFrame(df).assign(month=lambda d: pd.to_datetime(d.mo).dt.strftime("%b %Y"), share=lambda d: (d[col] * 100).round(1).astype(str) + "%")[["month", "event", "share"]])
+    mo.vstack([
+        mo.md("**The calendar of unity** — civic-unity share vs polarizing share, both parties pooled, months with 5,000+ tweets."),
+        mo.hstack([
+            mo.vstack([mo.md("*Most uniting months*"), mo.ui.table(_fmt(UNITY["calendar"]["uniting"], "civic"), selection=None)]),
+            mo.vstack([mo.md("*Most polarizing months*"), mo.ui.table(_fmt(UNITY["calendar"]["polarizing"], "polarizing"), selection=None)]),
+        ], widths="equal", gap=1.5),
+        mo.md("Unity peaks on things that actually passed — infrastructure, COVID relief, the Ukraine response. The eight most polarizing months in the dataset are all in 2025."),
+    ])
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Chapter 6 · Two networks, one Congress""")
     return
 
 

@@ -27,7 +27,8 @@ marimo run  marimo/congress_anger.py      # app mode
 | Ch. 2 — The seismograph | emotion dropdown (anger, disgust, fear, sadness, joy), year range, 40 hover-labelled spikes |
 | Ch. 3 — Anger keeps office hours | highlight-a-year slider over hour-of-day and month curves; 8 election cycles |
 | Ch. 4 — The anger forecast | party / president / hour / member dropdowns → probability card; **custom `anywidget`** tweet strip with play + click-to-select; night owls; loudest members with thresholds |
-| Ch. 5 — Two networks, one Congress | retweet vs `.@` call-out network on a shared "aisle" layout, edge threshold slider |
+| Ch. 5 — Nobody unites from opposition | civic-unity / gratitude toggle on the mirror chart; emotional-distance line; calendar tables |
+| Ch. 6 — Two networks, one Congress | retweet vs `.@` call-out network on a shared "aisle" layout, edge threshold slider |
 | Insight synthesis · Discussion & future work · Notes on marimo · Agentic tool usage | |
 
 ## Data
