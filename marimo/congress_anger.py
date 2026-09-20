@@ -881,38 +881,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        ## Discussion & future work
-
-        **Limits.** Scores are model estimates (spot-checked, not human-labelled; a separate sentiment model's *negative* score correlates 0.80).
-        Hours use each member's home-state clock, which is wrong whenever they're in Washington — Patty Murray's "before sunrise" is DC breakfast.
-        The `.@` convention faded after Twitter changed reply visibility in 2017, and the 2023–24 collection contains almost no retweets, so both
-        networks are weighted toward 2013–2022. We see explicit public call-outs only; replies-to and quote tweets are not in the data.
-
-        **Next.** (1) The other ten emotions are already scored: *fear* should spike on shootings and COVID where *anger* spikes on shutdowns —
-        a 2-D map of the 40 spike weeks would separate "threatened" from "aggrieved". (2) A per-member change-point ("the day Congressman X stopped
-        being nice"). (3) A weekday-vs-weekend personality split, which is probably a staff-vs-member split. (4) A Baltimore cross-reference:
-        the Maryland delegation's tweets that mention the city against Baltimore's own open data (311 requests, crime) on the same weeks.
-
-        ## Notes on marimo
-
-        *What worked.* Reactivity made the "forecast" natural: four dropdowns and a function, no callbacks. `mo.ui.plotly` inherits our styling
-        unchanged. `mo.ui.anywidget` let us keep the one animation a web page did better (the tweet strip) and gain something back — the clicked
-        dot is a Python value, so the tweet text is rendered by a *different cell*. `mo.stat`, `mo.callout`, `mo.accordion` and `mo.ui.table` did
-        most of the layout work with no CSS. Because a notebook is a `.py` file, the whole thing lives in git next to the analysis pipeline.
-
-        *What we'd want.* A first-class way to animate a chart over a variable (we used a JS timer inside the widget); a `mo.carousel` that
-        remembers which slide a reader is on; and a lazy-load hint for expensive cells so a 5-minute reading pass doesn't wait on the network panel.
-
         ## Agentic tool usage
 
-        This project was built in a pair with Claude Code over one long session. The division of labour that worked: the human chose the
-        questions, the story beats and the taste calls ("this chart is not good", "make it a coin flip", "that's not what I meant by timelapse");
-        the agent did the data engineering (matching 1,156 handles to birthdays, labelling 5M tweets on a GPU it first had to get working),
-        wrote and re-ran the analyses, and drafted copy the human then cut. Two lessons. First, **make the agent validate its own claims**: asked
-        "are we sure `.@` means a call-out?", it sampled tweets, found the convention was also used for praise, and narrowed the claim to what
-        the data supported — that check is now the Methods note. Second, **the agent's statistics need the same scepticism as its prose**: the
-        first "within-person age" model was perfectly collinear and reported a meaningless p = 0.82; it was caught only because the standard error
-        was ten times larger than everything around it. The agent's best work came when it was asked to disagree, and its worst when it wasn't.
+        During the development of this project, we used Claude coding agent to help us write and debug code, and to generate text for the report. We used Claude to generate code snippets, suggest visualizations, and provide explanations of our findings. We also used Claude to help us write the narrative sections of the report.
+        
         """
     )
     return
