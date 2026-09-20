@@ -68,8 +68,11 @@ function setupCarousels() {
         if (loaded.has(el.id) && el._fullLayout) Plotly.Plots.resize(el); else renderIfNeeded(el.id);
       });
     };
-    car.querySelector(".prev").addEventListener("click", () => show(i - 1));
-    car.querySelector(".next").addEventListener("click", () => show(i + 1));
+    // keep the pager where the reader clicked it: measure it before the slide swaps, scroll by the shift after
+    const stable = (fn) => () => { const pager = car.querySelector(".pager"); const before = pager.getBoundingClientRect().top; fn();
+      const after = pager.getBoundingClientRect().top; if (Math.abs(after - before) > 1) window.scrollBy({ top: after - before, behavior: "instant" }); };
+    car.querySelector(".prev").addEventListener("click", stable(() => show(i - 1)));
+    car.querySelector(".next").addEventListener("click", stable(() => show(i + 1)));
     car._show = show;
     show(0);
   });

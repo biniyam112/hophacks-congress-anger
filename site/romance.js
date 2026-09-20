@@ -39,10 +39,13 @@ let D, months, years, playing = false, i = 0, pos = 0, lastTs = null, raf = null
 let smooth = [];                       // 3-month centred mean of the distance, so the figures glide instead of twitch
 const MASK_FROM = "2020-03", MASK_TO = "2021-05";   // pandemic months: both figures wear masks
 let cur = null;                        // current (tweened) room colours
-let halfCur = null;                    // damped position of the figures (they glide toward the target)
+let halfCur = null;
+let TW = {}, lastBubbleMonth = null;   // exemplary tweets per month, and which month the bubbles currently show
+const WIDE = 0.22;                     // distance above which the two sides 'speak'                    // damped position of the figures (they glide toward the target)
 
 async function main() {
   D = await (await fetch("data/unity.json")).json();
+  TW = await (await fetch("data/romance_tweets.json")).json();
   months = D.distance_month.mo.map((m, k) => ({ mo: m, year: +m.slice(0, 4), d: D.distance_month.d[k] }));
   years = Object.fromEntries(D.distance.year.map((y, k) => [y, { gap: D.distance.gap[k], demHigher: D.distance.sign[k].startsWith("Democrats"), d: D.distance.d[k] }]));
   smooth = months.map((m, k) => { const w = months.slice(Math.max(0, k - 2), k + 3); return w.reduce((a, x) => a + x.d, 0) / w.length; });   // 5-month centred mean
@@ -136,6 +139,17 @@ function render(p, dt = 0) {
   $("card").setAttribute("opacity", clamp(Math.min(since / 1.5, (14 - since) / 3), 0, 1));
   document.querySelectorAll(".act").forEach((el2, k) => el2.classList.toggle("on", ACTS[k] === act));
   $("scrub").value = i;
+  // speech bubbles: when the gap is wide, each side's most characteristic tweet of the month
+  const key = m.mo.slice(0, 7), wide = d >= WIDE && TW[key] && TW[key].dem && TW[key].rep;
+  $("bubbles").classList.toggle("hidden", !wide);
+  if (wide && key !== lastBubbleMonth) {
+    lastBubbleMonth = key;
+    for (const side of ["dem", "rep"]) {
+      const t = TW[key][side];
+      $(`b-${side}-who`).textContent = t.who; $(`b-${side}-txt`).textContent = `“${t.text}”`;
+      $(`b-${side}-emo`).textContent = `${t.emo} ${t.score.toFixed(2)} · ${$("hud-date").textContent}`;
+    }
+  }
 }
 function rgbToHex(rgb) { const v = rgb.match(/\d+/g).map(Number); return "#" + v.map((x) => x.toString(16).padStart(2, "0")).join(""); }
 
