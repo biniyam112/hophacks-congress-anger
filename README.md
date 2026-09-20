@@ -1,4 +1,4 @@
-# What Makes Congress Angry?
+# What's making US angry?
 
 A HopHacks 2026 project: 4.8 million tweets by 902 members of Congress (2011–2026), each scored for anger, and a
 field guide to what predicts it — the presidency, the clock, the person, and the medium.

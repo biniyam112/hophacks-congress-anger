@@ -1,8 +1,8 @@
-# What Makes Congress Angry? — marimo notebook
+# What's making US angry? — marimo notebook
 
 [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/notebooks)
 
-An interactive marimo notebook that reproduces every chart of the *What Makes Congress Angry?* story and turns the
+An interactive marimo notebook that reproduces every chart of the *What's making US angry?* story and turns the
 "anger forecast" into a live function: 4.8M tweets by 902 members of Congress (2011–2026), each scored for anger.
 
 ## Run it

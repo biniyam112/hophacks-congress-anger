@@ -1,4 +1,4 @@
-/* What Makes Congress Angry? — charts (Plotly) + carousel */
+/* What's making US angry? — charts (Plotly) + carousel */
 const C = {
   ink: "#0b0b0b", ink2: "#52514e", muted: "#898781", grid: "#e1e0d9", axis: "#c3c2b7", surface: "#fcfcfb",
   dem: "#2a78d6", rep: "#e34948", accent: "#eb6834",

@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.24.2"
-app = marimo.App(width="medium", app_title="What Makes Congress Angry?")
+app = marimo.App(width="medium", app_title="What's making US angry?")
 
 
 @app.cell
@@ -14,7 +14,7 @@ def _():
 def _(mo):
     mo.md(
         r"""
-        # What Makes Congress Angry?
+        # What's making US angry?
 
         **A field guide to Congressional anger, from 4.8 million tweets by 902 members of Congress, 2011–2026.**
 
