@@ -137,9 +137,10 @@ def _():
         lay = dict(
             paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
             font=dict(family="Inter, system-ui, sans-serif", size=13, color=C["ink2"]),
-            margin=dict(l=56, r=24, t=30, b=48), hovermode="x unified",
+            margin=dict(l=56, r=24, t=70, b=48), hovermode="x unified",
+            title=dict(x=0, y=0.98, yanchor="top", font=dict(size=16, color=C["ink"])),
             hoverlabel=dict(bgcolor=C["ink"], bordercolor=C["ink"], font=dict(color="#fff", size=12.5)),
-            legend=dict(orientation="h", x=0, y=1.12, font=dict(size=12)),
+            legend=dict(orientation="h", x=0, y=1.0, yanchor="bottom", font=dict(size=12)),
             xaxis=dict(gridcolor=C["grid"], linecolor=C["axis"], zeroline=False, tickfont=dict(color=C["muted"])),
             yaxis=dict(gridcolor=C["grid"], linecolor=C["axis"], zeroline=False, tickfont=dict(color=C["muted"])),
         )
@@ -273,7 +274,7 @@ def _(mo, weekly):
         value="anger", label="emotion",
     )
     _years = sorted({int(w[:4]) for w in weekly.wk})
-    year_range = mo.ui.range_slider(start=min(_years), stop=max(_years), step=1, value=[min(_years), max(_years)], label="years", show_value=True)
+    year_range = mo.ui.range_slider(start=min(_years), stop=max(_years), step=1, value=[min(_years), max(_years)], label="years")
     mo.hstack([emotion, year_range], justify="start", gap=2)
     return emotion, year_range
 
@@ -299,7 +300,7 @@ def _(C, SEISMO, base_layout, emotion, go, mo, pd, weekly, year_range):
             hovertemplate="%{x|%b %d, %Y}<br>%{text}<extra></extra>",
         )
     _fig.update_layout(base_layout(hovermode="closest", height=440, title=dict(text=f"Weekly mean {_col}, {year_range.value[0]}–{year_range.value[1]}", font=dict(size=16, color=C["ink"])),
-                                   yaxis=dict(title=f"mean {_col} score, weekly"), legend=dict(y=1.08)))
+                                   yaxis=dict(title=f"mean {_col} score, weekly")))
     seismo_chart = mo.ui.plotly(_fig)
     seismo_chart
     return (seismo_chart,)
@@ -327,7 +328,7 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    highlight_year = mo.ui.slider(start=2011, stop=2026, step=1, value=2025, label="highlight a year", show_value=True)
+    highlight_year = mo.ui.slider(start=2011, stop=2026, step=1, value=2025, label="highlight a year")
     highlight_year
     return (highlight_year,)
 
@@ -350,11 +351,12 @@ def _(C, HOUR, MONTH, base_layout, go, highlight_year, mo):
         ))
         return mo.ui.plotly(fig)
 
-    _hour = _curves(HOUR, "Anger by hour of day (member's local time)", "hour", [0, 3, 6, 9, 12, 15, 18, 21, 23],
+    _hour = _curves(HOUR, "By hour of day (home-state time)", "hour", [0, 3, 6, 9, 12, 15, 18, 21, 23],
                     ["12am", "3am", "6am", "9am", "noon", "3pm", "6pm", "9pm", "11pm"], [[20.5, 23.5], [-0.5, 4.5]], "after dark")
-    _month = _curves(MONTH, "Anger by month", "month", list(range(1, 13)), ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    _month = _curves(MONTH, "By month", "month", list(range(1, 13)), ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                      [[7.5, 8.5]], "August recess")
     mo.vstack([
+        mo.md(f"**Δ anger vs. each year's own mean — {highlight_year.value} in orange**"),
         mo.hstack([_hour, _month], widths="equal"),
         mo.md(
             f"Grey lines are individual years, **orange is {highlight_year.value}**, black is the tweet-weighted mean; every curve is measured against its own "
@@ -379,7 +381,7 @@ def _(C, CYCLE, base_layout, go, mo):
         _fig.add_scatter(x=_xs, y=_d["rep"], line=dict(color=C["rep"], width=0.9), opacity=0.8, showlegend=False, hovertemplate="R %{y:.3f}<extra></extra>", row=_r, col=_col)
         _fig.add_scatter(x=_xs, y=_d["anger"], line=dict(color=C["ink"], width=1.3), showlegend=False, hovertemplate="%{x} wk: %{y:.3f}<extra></extra>", row=_r, col=_col)
         _fig.add_vline(x=0, line=dict(color=C["axis"], width=1, dash="dot"), row=_r, col=_col)
-    _fig.update_layout(base_layout(hovermode="closest", height=480, margin=dict(l=40, r=12, t=40, b=40),
+    _fig.update_layout(base_layout(hovermode="closest", height=500, margin=dict(l=40, r=12, t=60, b=40),
                                    title=dict(text="Eight election cycles, no build-up (weeks before election day →)", font=dict(size=15, color=C["ink"]))))
     _fig.update_xaxes(gridcolor=C["grid"], tickfont=dict(size=10, color=C["muted"]), range=[-105, 2])
     _fig.update_yaxes(gridcolor=C["grid"], tickfont=dict(size=10, color=C["muted"]), range=[0.05, 0.65])
@@ -622,7 +624,7 @@ def _(C, FORECAST, PARTY, base_layout, go, mo):
     _fig.add_annotation(x=0.5, xref="paper", y=-0.85, text="NIGHT OWLS — angrier after dark", showarrow=False, font=dict(size=11, color=C["muted"]))
     _fig.add_annotation(x=0.5, xref="paper", y=_div, text="MORNING PEOPLE — angrier by day", showarrow=False, font=dict(size=11, color=C["muted"]))
     _fig.update_layout(base_layout(
-        hovermode="closest", height=420, margin=dict(l=10, r=24, t=48, b=44), legend=dict(y=1.14),
+        hovermode="closest", height=440, margin=dict(l=10, r=24, t=70, b=44),
         title=dict(text="Night owls and morning people", font=dict(size=16, color=C["ink"])),
         xaxis=dict(range=[0, 0.82], tickformat=".0%", title="share of tweets that are angry"),
         yaxis=dict(showgrid=False, range=[_y[-1] + 0.7, -1.2], tickvals=_y, ticktext=[r["name"] for r in _O], tickfont=dict(size=13, color=C["ink"])),
@@ -657,7 +659,7 @@ def _(C, LOUDEST, PARTY, base_layout, go, min_tweets, mo, top_n, volume):
                  textfont=dict(color=[C["dem"] if b else C["ink2"] for b in _isB]),
                  customdata=list(zip(_v.tweets_per_day.round(1), (_v.share_angry * 100).round(0), _v.n)), hovertemplate="%{y}<br>%{customdata[0]} tweets/day, %{customdata[1]}% angry (%{customdata[2]} tweets)<extra></extra>")
     _fig.add_vline(x=LOUDEST["median_per_day"], line=dict(color=C["axis"], width=1, dash="dot"), annotation_text="typical member", annotation_position="top")
-    _fig.update_layout(base_layout(barmode="stack", hovermode="closest", height=30 * len(_v) + 120, margin=dict(l=10, r=200, t=40, b=48), legend=dict(x=1, xanchor="right", y=1.08),
+    _fig.update_layout(base_layout(barmode="stack", hovermode="closest", height=30 * len(_v) + 120, margin=dict(l=10, r=200, t=70, b=48), legend=dict(x=1, xanchor="right", y=1.0, yanchor="bottom"),
                                    title=dict(text="The loudest people in Congress", font=dict(size=16, color=C["ink"])),
                                    xaxis=dict(title="tweets per day"), yaxis=dict(autorange="reversed", showgrid=False, automargin=True)))
     mo.vstack([
@@ -734,7 +736,7 @@ def _(C, NETWORK, PARTY, base_layout, go, min_edge, mo, net_kind):
         for _i, _n2 in enumerate(_arr):
             _ann.append(dict(x=_n2["x"], y=_n2["y"], text=_n2["name"].split(",")[0].split(" ")[-1] if "," not in _n2["name"] else _n2["name"].split(",")[0], showarrow=True, arrowhead=0, arrowwidth=0.7, arrowcolor=C["muted"], ax=_side * -46, ay=(_i - 1) * 16, xanchor="right" if _side < 0 else "left", font=dict(size=11, color=C["ink"])))
     _fig.update_layout(base_layout(
-        hovermode="closest", height=520, margin=dict(l=4, r=4, t=30, b=4), legend=dict(x=0.5, xanchor="center", y=-0.02),
+        hovermode="closest", height=540, margin=dict(l=4, r=4, t=50, b=4), legend=dict(x=0.5, xanchor="center", y=-0.02, yanchor="top"),
         title=dict(text=("Who retweets whom" if net_kind.value == "retweet" else "Who calls out whom (.@)"), font=dict(size=16, color=C["ink"])),
         xaxis=dict(visible=False, range=[-1.5, 1.5], fixedrange=True), yaxis=dict(visible=False, range=[-1.2, 1.2], fixedrange=True),
         annotations=_ann, shapes=[dict(type="line", x0=0, x1=0, y0=-1.05, y1=1.05, line=dict(color=C["grid"], width=1, dash="dot"))],
@@ -754,12 +756,13 @@ def _(C, NETWORK, PARTY, base_layout, go, min_edge, mo, net_kind):
 
 @app.cell
 def _(NETWORK, mo, pd):
-    _rods = pd.DataFrame(NETWORK["rods"]).rename(columns={"cross_dot_in": "called out by the other party", "cross_dot_anger": "mean anger"}).head(8)
-    _br = pd.DataFrame(NETWORK["bridges"]).rename(columns={"cross_rt_in": "retweeted by the other party"}).head(8)
-    mo.hstack([
-        mo.vstack([mo.md("**The lightning rods**"), mo.ui.table(_rods, selection=None)]),
-        mo.vstack([mo.md("**The bridges** — Massie and McCain are on both lists: the only people both sides retweet *and* yell at"), mo.ui.table(_br, selection=None)]),
-    ], widths="equal", gap=2)
+    _rods = pd.DataFrame(NETWORK["rods"]).head(8).assign(cross_dot_anger=lambda d: d.cross_dot_anger.round(2)).rename(
+        columns={"cross_dot_in": "call-outs from the other party", "cross_dot_anger": "mean anger of those"})
+    _br = pd.DataFrame(NETWORK["bridges"]).head(8).rename(columns={"cross_rt_in": "retweets from the other party"})
+    mo.ui.tabs({
+        "The lightning rods": mo.vstack([mo.md("Most `.@`-addressed by the *other* party, with the mean anger of those tweets."), mo.ui.table(_rods, selection=None)]),
+        "The bridges": mo.vstack([mo.md("Most retweeted by the *other* party. Massie and McCain are on both lists — the only people both sides retweet *and* yell at."), mo.ui.table(_br, selection=None)]),
+    })
     return
 
 
