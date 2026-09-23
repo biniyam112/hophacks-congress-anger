@@ -1,0 +1,19 @@
+# analysis pipeline
+duckdb>=1.0
+pandas>=2.1
+pyarrow>=15.0
+numpy>=1.26
+statsmodels>=0.14
+networkx>=3.1
+PyYAML>=6.0
+matplotlib>=3.8
+
+# scoring (install a CUDA build of torch for GPU labelling:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu126)
+torch>=2.2
+transformers>=4.40
+
+# marimo notebook
+marimo>=0.24
+plotly>=5.22
+anywidget>=0.9
