@@ -52,7 +52,7 @@ const pc = (v) => Math.round(v * 100) + "%";
   s.addText("What's making\nUS angry?", { x: M, y: 1.5, w: 7.2, h: 2.6, fontFace: HEAD, fontSize: 60, bold: true, color: "FFFFFF", isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 0.95 });
   s.addText("4.8 million tweets, one finding: anger in Congress isn't an opinion. It's a jersey you put on when your side loses the White House.",
     { x: M, y: 4.3, w: 6.6, h: 1.4, fontFace: BODY, fontSize: 17, color: "EEF1F7", isTextBox: true, margin: 0, valign: "top" });
-  s.addText("github.com/biniyam112/hophacks-congress-anger", { x: M, y: 6.5, w: 7, h: 0.4, fontFace: MONO, fontSize: 11, color: "CFD5E3", isTextBox: true, margin: 0 });
+  s.addText("github.com/biniyam112/hophacks-tweet-sentiment", { x: M, y: 6.5, w: 7, h: 0.4, fontFace: MONO, fontSize: 11, color: "CFD5E3", isTextBox: true, margin: 0 });
   s.addChart(pres.ChartType.line, [
     { name: "Democrats", labels: YEAR.year.map(String), values: YEAR.dem }, { name: "Republicans", labels: YEAR.year.map(String), values: YEAR.rep },
   ], { x: 7.5, y: 1.3, w: 5.3, h: 3.4, chartColors: ["8FC0FF", "FF8A86"], lineSize: 3, lineDataSymbol: "circle", lineDataSymbolSize: 6, showLegend: true, legendPos: "t", legendColor: "FFFFFF", legendFontFace: BODY, legendFontSize: 10,
@@ -279,7 +279,7 @@ const pc = (v) => Math.round(v * 100) + "%";
     s.addText(h, { x: 8.8, y: y + 0.1, w: 3.7, h: 0.4, fontFace: HEAD, fontSize: 15, bold: true, color: "FFFFFF", isTextBox: true, margin: 0 });
     s.addText(d, { x: 8.8, y: y + 0.5, w: 3.7, h: 0.65, fontFace: BODY, fontSize: 10.5, color: "EEF1F7", isTextBox: true, margin: 0, valign: "top" });
   });
-  s.addText("github.com/biniyam112/hophacks-congress-anger", { x: M, y: 6.85, w: 8, h: 0.35, fontFace: MONO, fontSize: 11, color: "CFD5E3", isTextBox: true, margin: 0 });
+  s.addText("github.com/biniyam112/hophacks-tweet-sentiment", { x: M, y: 6.85, w: 8, h: 0.35, fontFace: MONO, fontSize: 11, color: "CFD5E3", isTextBox: true, margin: 0 });
 }
 
 pres.writeFile({ fileName: path.join(__dirname, "whats_making_us_angry.pptx") }).then((f) => console.log("wrote", f));

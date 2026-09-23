@@ -68,7 +68,7 @@ def _():
 
     import pandas as pd
 
-    GITHUB_RAW = "https://raw.githubusercontent.com/biniyam112/hophacks-congress-anger/main/marimo/data/"
+    GITHUB_RAW = "https://raw.githubusercontent.com/biniyam112/hophacks-tweet-sentiment/main/marimo/data/"
     LOCAL = Path(__file__).parent / "data" if "__file__" in globals() else Path("data")
 
     def load_json(name: str) -> dict:

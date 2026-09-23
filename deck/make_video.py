@@ -268,8 +268,8 @@ def scene_close(sec=6):
         text(im, "What's making US angry?", (W / 2, 330), font(SERIF_B, 96), mixc(PAGE, (255, 255, 255), g), "mm")
         text(im, "Anger in Congress isn't an opinion. It's a jersey you put on when your side loses the White House.", (W / 2, 470), font(SANS, 36), mixc(PAGE, (238, 241, 247), g), "mm")
         g2 = ease(min(1, max(0, (t - 0.35) / 0.4)))
-        text(im, "biniyam112.github.io/hophacks-congress-anger", (W / 2, 640), font(MONO, 34), mixc(PAGE, (255, 255, 255), g2), "mm")
-        text(im, "github.com/biniyam112/hophacks-congress-anger   ·   marimo notebook on molab", (W / 2, 700), font(MONO, 24), mixc(PAGE, (207, 213, 227), g2), "mm")
+        text(im, "biniyam112.github.io/hophacks-tweet-sentiment", (W / 2, 640), font(MONO, 34), mixc(PAGE, (255, 255, 255), g2), "mm")
+        text(im, "github.com/biniyam112/hophacks-tweet-sentiment   ·   marimo notebook on molab", (W / 2, 700), font(MONO, 24), mixc(PAGE, (207, 213, 227), g2), "mm")
         text(im, "HopHacks 2026", (W / 2, 900), font(SANS, 24), mixc(PAGE, (223, 227, 236), g2), "mm")
         yield im
 
